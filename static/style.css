@@ -1,0 +1,171 @@
+/* Reset total para remover comportamentos padrão do navegador */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box !important;
+}
+
+body {
+    background-color: #0b0e14 !important; /* Azul marinho muito escuro */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+}
+
+/* Container que evita que o card estique na tela toda */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.login-card {
+    background-color: #161b22 !important; /* Cor do card central */
+    width: 100%;
+    max-width: 400px; /* Impede o efeito esticado */
+    padding: 45px 35px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid #30363d;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.logo-wrapper {
+    margin-bottom: 25px;
+}
+
+.company-logo {
+    max-width: 220px; /* Ajuste conforme o tamanho da sua imagem */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.login-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.login-subtitle {
+    color: #8b949e;
+    font-size: 14px;
+    margin-bottom: 35px;
+}
+
+.input-field {
+    width: 100% !important;
+    padding: 16px;
+    margin-bottom: 15px;
+    background-color: #0d1117 !important;
+    border: 1px solid #30363d !important;
+    border-radius: 10px;
+    color: #ffffff !important;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+/* Borda laranja no campo Usuário */
+.border-orgadata {
+    border-color: #f7941d !important;
+}
+
+.input-field:focus {
+    border-color: #f7941d !important;
+}
+
+.row-extras {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #8b949e;
+    margin-bottom: 30px;
+}
+
+.forgot-link {
+    color: #8b949e;
+    text-decoration: none;
+}
+
+/* Botão principal com a cor da Orgadata */
+.btn-signin {
+    width: 100% !important;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    background-color: #f7941d !important; /* Laranja da logo */
+    color: #000000 !important;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: opacity 0.3s;
+}
+
+.btn-signin:hover {
+    opacity: 0.9;
+}
+
+.divider {
+    margin: 25px 0;
+    display: flex;
+    align-items: center;
+    color: #484f58;
+    font-size: 12px;
+}
+
+.divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #30363d;
+}
+
+.divider span {
+    padding: 0 10px;
+}
+
+.btn-social {
+    width: 100% !important;
+    padding: 12px;
+    margin-bottom: 12px;
+    background-color: #21262d !important;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-social:hover {
+    background-color: #2d333b;
+}
+
+.footer-text {
+    margin-top: 30px;
+    font-size: 13px;
+    color: #8b949e;
+}
+
+.footer-text a {
+    color: #f7941d;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.error-msg {
+    background-color: rgba(248, 81, 73, 0.1);
+    color: #ff7b72;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 13px;
+}

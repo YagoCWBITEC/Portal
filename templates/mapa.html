@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MAPA</title>
+    <script src="https://cdn.jsdelivr.net/npm/powerbi-client/dist/powerbi.js"></script>
+</head>
+
+<body style="margin:0;background:#111;color:white;">
+
+<div id="reportContainer" style="height:100vh;"></div>
+
+<script>
+
+fetch("/get_embed_config/mapa")
+.then(res => res.json())
+.then(data => {
+
+    var models = window['powerbi-client'].models;
+
+    var embedConfig = {
+        type: 'report',
+        id: data.reportId,
+        embedUrl: data.embedUrl,
+        accessToken: data.embedToken,
+        tokenType: models.TokenType.Embed,
+
+        // Página específica vinda do backend
+        pageName: data.pageName,
+
+        // Configurações visuais
+        settings: {
+            panes: {
+                filters: { visible: false },
+                pageNavigation: { visible: false }
+            }
+        }
+    };
+
+    var reportContainer = document.getElementById('reportContainer');
+
+    // Limpa embeds anteriores (boa prática)
+    powerbi.reset(reportContainer);
+
+    // Embed do relatório
+    var report = powerbi.embed(reportContainer, embedConfig);
+
+})
+.catch(error => {
+    console.error("Erro ao carregar embed config:", error);
+});
+
+</script>
+
+</body>
+</html>

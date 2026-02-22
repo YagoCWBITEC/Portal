@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Orgadata</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}?v=1.5">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo-wrapper">
+                <img src="{{ url_for('static', path='img/logo.jpg') }}" alt="Orgadata" class="company-logo">
+            </div>
+            
+            <h1 class="login-title">Entrar</h1>
+            <p class="login-subtitle">Acesse o portal de dados</p>
+
+            {% if error %}
+            <div class="error-msg">{{ error }}</div>
+            {% endif %}
+
+            <form action="/login" method="post">
+                <div class="input-group">
+                    <input type="text" name="username" placeholder="Usuário" required class="input-field border-orgadata">
+                </div>
+                
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Senha" required class="input-field">
+                </div>
+
+                <div class="row-extras">
+                    <label class="checkbox-label">
+                        <input type="checkbox"> Lembrar de mim
+                    </label>
+                    <a href="#" class="forgot-link">Esqueceu a senha?</a>
+                </div>
+
+                <button type="submit" class="btn-signin">ENTRAR</button>
+            </form>
+
+            <div class="divider">
+                <span>OU</span>
+            </div>
+
+            <button type="button" class="btn-social">Continuar com Google</button>
+            <button type="button" class="btn-social">Continuar com Apple</button>
+
+            <p class="footer-text">
+                Novo aqui? <a href="#">Criar conta</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

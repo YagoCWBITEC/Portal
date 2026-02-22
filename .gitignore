@@ -1,0 +1,11 @@
+# Ambiente Virtual
+venv/
+.venv/
+__pycache__/
+
+# Variáveis de Ambiente (Senhas)
+.env
+
+# Arquivos do VS Code ou SO
+.vscode/
+.DS_Store

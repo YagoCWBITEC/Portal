@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Portal BI Interno</title>
+  <script src="https://cdn.jsdelivr.net/npm/powerbi-client/dist/powerbi.js"></script>
+</head>
+<body>
+
+<h2>Portal BI - Versão Demonstrativa</h2>
+
+<div id="reportContainer" style="height:800px;"></div>
+
+<script>
+fetch("http://127.0.0.1:8000/embed")
+.then(response => response.json())
+.then(data => {
+
+  const models = window['powerbi-client'].models;
+
+  const embedConfig = {
+      type: 'report',
+      tokenType: models.TokenType.Embed,
+      accessToken: data.token,
+      embedUrl: data.embedUrl,
+      id: data.reportId,
+      settings: {
+        panes: {
+          filters: { visible: false },
+          pageNavigation: { visible: true }
+        }
+      }
+  };
+
+  const reportContainer = document.getElementById('reportContainer');
+  powerbi.embed(reportContainer, embedConfig);
+
+});
+</script>
+
+</body>
+</html>

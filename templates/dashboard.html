@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Portal BI</title>
+
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            text-align: center;
+        }
+
+        .container {
+            padding: 40px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .perfil {
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+
+        .info-gerente {
+            color: orange;
+        }
+
+        .info-analista {
+            color: lightblue;
+        }
+
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .btn {
+            background: #222;
+            border: 1px solid #444;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+            min-width: 200px;
+        }
+
+        .btn:hover {
+            background: #ff7b00;
+            transform: scale(1.05);
+        }
+
+        .logout {
+            margin-top: 40px;
+            display: inline-block;
+            color: red;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📊 Portal BI</h1>
+
+    <div class="perfil">
+        Perfil logado: <strong>{{ role }}</strong>
+    </div>
+
+    {% if role == "gerente" %}
+        <p class="info-gerente">
+            Acesso completo aos relatórios estratégicos.
+        </p>
+    {% endif %}
+
+    {% if role == "analista" %}
+        <p class="info-analista">
+            Acesso limitado aos relatórios operacionais.
+        </p>
+    {% endif %}
+
+    <div class="menu">
+
+        <!-- Acesso para ambos -->
+        <a class="btn" href="/pagina/desempenho">📈 Desempenho Geral</a>
+        <a class="btn" href="/pagina/pdv">🏪 PDV Análise</a>
+        <a class="btn" href="/pagina/mapa">🗺️ Mapa Estratégico</a>
+        <a class="btn" href="/pagina/clientes">⭐ Clientes Fidelidade</a>
+
+        {% if role == "gerente" %}
+            <a class="btn" href="/pagina/perfil">👥 Perfil Clientes</a>
+            <a class="btn" href="/pagina/matriz">📊 Matriz O.R.G</a>
+            <a class="btn" href="/pagina/propagandistas">🧑‍⚕️ Propagandistas</a>
+            <a class="btn" href="/pagina/redes">🏬 Redes</a>
+            <a class="btn" href="/pagina/rfv">💰 RFV</a>
+            <a class="btn" href="/pagina/bitv">📺 BI TV</a>
+        {% endif %}
+
+    </div>
+
+    <a class="logout" href="/logout">🚪 Sair</a>
+
+</div>
+
+</body>
+</html>

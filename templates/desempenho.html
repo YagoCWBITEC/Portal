@@ -2,10 +2,14 @@
 <html>
 <head>
     <title>DESEMPENHO GERAL</title>
-    <script src="https://cdn.jsdelivr.net/npm/powerbi-client/dist/powerbi.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/powerbi-client/dist/powerbi.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
 </head>
 
-<body style="margin:0;background:#111;color:white;">
+<body class="dashboard-body">
+
+    <!-- BOTÃO VOLTAR -->
+<a href="/dashboard" class="btn-voltar">⬅ Voltar</a>
 
 <div id="reportContainer" style="height:100vh;"></div>
 

@@ -13,6 +13,21 @@ body {
     align-items: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Logo no fundo (marca d'água) */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("/static/img/logo.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1900px; /* ajuste se quiser */
+    opacity: 0.2; /* bem suave */
+    z-index: 0;
 }
 
 /* Container que evita que o card estique na tela toda */
@@ -25,9 +40,11 @@ body {
 }
 
 .login-card {
-    background-color: #161b22 !important; /* Cor do card central */
+    position: relative;
+    z-index: 1;
+    background-color: #161b22 !important;
     width: 100%;
-    max-width: 400px; /* Impede o efeito esticado */
+    max-width: 400px;
     padding: 45px 35px;
     border-radius: 16px;
     text-align: center;
@@ -40,8 +57,7 @@ body {
 }
 
 .company-logo {
-    max-width: 220px; /* Ajuste conforme o tamanho da sua imagem */
-    height: auto;
+    max-width: 300px; /* Ajuste conforme o tamanho da sua imagem */
     display: block;
     margin: 0 auto;
 }
@@ -168,4 +184,46 @@ body {
     border-radius: 8px;
     margin-bottom: 20px;
     font-size: 13px;
+}
+
+/* ============================= */
+/* BOTÃO DE VOLTAR (DASHBOARD) */
+/* ============================= */
+
+.btn-voltar {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 10px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    transition: 0.3s;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.btn-voltar:hover {
+    background-color: #f7941d;
+    color: #000000;
+    transform: scale(1.05);
+}
+
+/* ============================= */
+/* AJUSTE PARA PÁGINAS DE DASH */
+/* ============================= */
+
+.dashboard-body {
+    display: block !important;
+    justify-content: unset !important;
+    align-items: unset !important;
+    background-color: #111 !important;
+}
+
+/* Remove marca d’água do login nos dashboards */
+.dashboard-body::before {
+    display: none;
 }

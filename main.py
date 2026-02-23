@@ -3,7 +3,7 @@ import requests
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles  # <--- Importação garantida
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 # =====================================================
@@ -21,14 +21,19 @@ AUTHORITY_URL = f"https://login.microsoftonline.com/{TENANT_ID}/oauth2/v2.0/toke
 SCOPE = "https://analysis.windows.net/powerbi/api/.default"
 
 # =====================================================
+# 📁 Caminhos absolutos
+# =====================================================
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
+
+# =====================================================
 # 🚀 Inicialização do App
 # =====================================================
 app = FastAPI()
 
-# 📁 Configuração de Arquivos Estáticos e Templates
-# Isso garante que o FastAPI encontre o seu style.css dentro da pasta /static
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 # =====================================================
 # 🔑 Power BI - Token

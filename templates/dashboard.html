@@ -12,6 +12,19 @@
             text-align: center;
         }
 
+        /* Logo no fundo (marca d'água) */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url("/static/img/logo.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 1900px; /* ajuste o tamanho se quiser */
+            opacity: 0.4; /* transparência da logo */
+            z-index: -1;
+        }
+
         .container {
             padding: 40px;
         }

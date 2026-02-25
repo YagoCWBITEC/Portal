@@ -1,4 +1,3 @@
-/* Configurações globais da página */
 body {
     margin: 0;
     height: 100vh;
@@ -8,7 +7,6 @@ body {
     overflow: hidden;
 }
 
-/* Caixa de Informação de Atualização (Topo) */
 .update-box {
     position: absolute;
     top: 15px;
@@ -19,10 +17,9 @@ body {
     padding: 8px 18px;
     font-size: 12px;
     color: gold;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0,0,0,0.6);
 }
 
-/* Título "MENU" lateral */
 .menu-title {
     position: absolute;
     top: 80px;
@@ -31,17 +28,15 @@ body {
     color: gold;
 }
 
-/* Container que segura o círculo e os itens */
 .circle-container {
     position: absolute;
     top: 55%;
-    left: 50%; 
+    left: 50%;
     transform: translate(-50%, -50%);
     width: 900px;
     height: 600px;
 }
 
-/* Logo Central com moldura dourada */
 .center-logo {
     position: absolute;
     width: 300px;
@@ -60,7 +55,6 @@ body {
     width: 300px;
 }
 
-/* Estilo base de cada item (Link + Hexágono + Texto) */
 .item {
     position: absolute;
     display: flex;
@@ -71,82 +65,33 @@ body {
     width: 350px;
 }
 
-/* Direções para itens da ESQUERDA (Texto -> Hexágono) */
 .item.left {
     justify-content: flex-end;
     text-align: right;
 }
 
-/* Direções para itens da DIREITA (Hexágono -> Texto) */
 .item.right {
     justify-content: flex-start;
     text-align: left;
 }
 
-/* HEXÁGONO COM CANTOS ARREDONDADOS E BORDA REAL */
+/* ===== HEXÁGONO ARREDONDADO REAL ===== */
 .hex {
-    position: relative;
-    min-width: 95px;
+    width: 95px;
     height: 95px;
-    background: #9b9898;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 6 Q54 6 58 8 L86 24 Q90 26 90 30 L90 70 Q90 74 86 76 L58 92 Q54 94 50 94 Q46 94 42 92 L14 76 Q10 74 10 70 L10 30 Q10 26 14 24 L42 8 Q46 6 50 6 Z' fill='%239b9898' stroke='%23FFD700' stroke-width='4'/></svg>") no-repeat center/contain;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: 0.3s;
-
-    -webkit-mask: 
-        radial-gradient(circle at 50% 0%, transparent 18px, black 19px),
-        radial-gradient(circle at 100% 25%, transparent 18px, black 19px),
-        radial-gradient(circle at 100% 75%, transparent 18px, black 19px),
-        radial-gradient(circle at 50% 100%, transparent 18px, black 19px),
-        radial-gradient(circle at 0% 75%, transparent 18px, black 19px),
-        radial-gradient(circle at 0% 25%, transparent 18px, black 19px),
-        polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    
-    mask: 
-        radial-gradient(circle at 50% 0%, transparent 18px, black 19px),
-        radial-gradient(circle at 100% 25%, transparent 18px, black 19px),
-        radial-gradient(circle at 100% 75%, transparent 18px, black 19px),
-        radial-gradient(circle at 50% 100%, transparent 18px, black 19px),
-        radial-gradient(circle at 0% 75%, transparent 18px, black 19px),
-        radial-gradient(circle at 0% 25%, transparent 18px, black 19px),
-        polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-}
-
-.hex::before {
-    content: "";
-    position: absolute;
-    inset: -3px;
-    background: gold;
-
-    -webkit-mask: 
-        radial-gradient(circle at 50% 0%, transparent 18px, black 19px),
-        radial-gradient(circle at 100% 25%, transparent 18px, black 19px),
-        radial-gradient(circle at 100% 75%, transparent 18px, black 19px),
-        radial-gradient(circle at 50% 100%, transparent 18px, black 19px),
-        radial-gradient(circle at 0% 75%, transparent 18px, black 19px),
-        radial-gradient(circle at 0% 25%, transparent 18px, black 19px),
-        polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-
-    mask: 
-        radial-gradient(circle at 50% 0%, transparent 18px, black 19px),
-        radial-gradient(circle at 100% 25%, transparent 18px, black 19px),
-        radial-gradient(circle at 100% 75%, transparent 18px, black 19px),
-        radial-gradient(circle at 50% 100%, transparent 18px, black 19px),
-        radial-gradient(circle at 0% 75%, transparent 18px, black 19px),
-        radial-gradient(circle at 0% 25%, transparent 18px, black 19px),
-        polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-
-    z-index: -1;
 }
 
 .hex img {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     object-fit: contain;
 }
 
-/* Formatação do Texto (Label) */
 .label h3 {
     font-size: 14px;
     color: gold;
@@ -160,26 +105,18 @@ body {
     color: #ddd;
 }
 
-/* Hover */
 .item:hover .hex {
-    background: gold;
+    filter: brightness(1.15);
     transform: scale(1.05);
 }
 
-.item:hover .hex img {
-    filter: brightness(0);
-}
-
 /* POSIÇÕES */
-
-/* Lado Esquerdo */
 .pos-desempenho { top: 0px;   left: -50px; }
 .pos-pdv        { top: 120px; left: -130px; }
 .pos-clientes   { top: 250px; left: -160px; }
 .pos-matriz     { top: 380px; left: -130px; }
 .pos-propaganda { top: 500px; left: -50px; }
 
-/* Lado Direito */
 .pos-mapa       { top: 0px;   right: -50px; }
 .pos-redes      { top: 120px; right: -130px; }
 .pos-rfv        { top: 250px; right: -160px; }

@@ -77,8 +77,8 @@ body {
 
 /* ===== HEXÁGONO ARREDONDADO REAL ===== */
 .hex {
-    width: 95px;
-    height: 95px;
+    width: 120px;
+    height: 120px;
     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 6 Q54 6 58 8 L86 24 Q90 26 90 30 L90 70 Q90 74 86 76 L58 92 Q54 94 50 94 Q46 94 42 92 L14 76 Q10 74 10 70 L10 30 Q10 26 14 24 L42 8 Q46 6 50 6 Z' fill='%239b9898' stroke='%23FFD700' stroke-width='4'/></svg>") no-repeat center/contain;
     display: flex;
     justify-content: center;
@@ -93,14 +93,14 @@ body {
 }
 
 .label h3 {
-    font-size: 14px;
+    font-size: 22px;
     color: gold;
     margin: 0;
     text-transform: uppercase;
 }
 
 .label p {
-    font-size: 11px;
+    font-size: 15px;
     margin-top: 4px;
     color: #ddd;
 }

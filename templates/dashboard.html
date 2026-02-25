@@ -1,134 +1,196 @@
 <!DOCTYPE html>
-<html>
+<!-- Define que o documento é HTML5 -->
+
+<html lang="pt-BR">
+<!-- Início do documento HTML e define o idioma como Português do Brasil -->
+
 <head>
-    <title>Dashboard - Portal BI</title>
+    <meta charset="UTF-8">
+    <!-- Define a codificação de caracteres como UTF-8 (permite acentos e caracteres especiais) -->
 
-    <style>
-        body {
-            background: #111;
-            color: white;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            text-align: center;
-        }
+    <title>Portal BI</title>
+    <!-- Título da página que aparece na aba do navegador -->
 
-        /* Logo no fundo (marca d'água) */
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background-image: url("/static/img/logo.png");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 1900px; /* ajuste o tamanho se quiser */
-            opacity: 0.4; /* transparência da logo */
-            z-index: -1;
-        }
-
-        .container {
-            padding: 40px;
-        }
-
-        h1 {
-            margin-bottom: 10px;
-        }
-
-        .perfil {
-            margin-bottom: 30px;
-            font-size: 18px;
-        }
-
-        .info-gerente {
-            color: orange;
-        }
-
-        .info-analista {
-            color: lightblue;
-        }
-
-        .menu {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            max-width: 900px;
-            margin: auto;
-        }
-
-        .btn {
-            background: #222;
-            border: 1px solid #444;
-            padding: 15px 25px;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: 0.3s;
-            min-width: 200px;
-        }
-
-        .btn:hover {
-            background: #ff7b00;
-            transform: scale(1.05);
-        }
-
-        .logout {
-            margin-top: 40px;
-            display: inline-block;
-            color: red;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .logout:hover {
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', path='/portal.css') }}">
+    <!-- Importa o arquivo CSS da pasta static (usando template engine, provavelmente FastAPI ou Flask) -->
 </head>
 
 <body>
+<!-- Início do corpo visível da página -->
 
-<div class="container">
+<div class="update-box">
+    <!-- Caixa de informação de atualização -->
 
-    <h1>📊 Portal BI</h1>
+    ATUALIZADO DIARIAMENTE. ÚLTIMA ATUALIZAÇÃO EM:<br>
+    <!-- Texto informativo + quebra de linha -->
 
-    <div class="perfil">
-        Perfil logado: <strong>{{ role }}</strong>
+    <b>25/02/2026 07:34</b>
+    <!-- Data e hora da última atualização em negrito -->
+</div>
+
+<h1 class="menu-title">MENU</h1>
+<!-- Título principal da página -->
+
+<div class="dashboard-container">
+    <!-- Container principal que envolve o dashboard -->
+
+    <div class="circle-container">
+        <!-- Container que provavelmente organiza os itens em formato circular -->
+
+        <div class="center-logo">
+            <!-- Área central do layout -->
+
+            <img src="/static/img/logo2.png" alt="Logo OrgaData">
+            <!-- Exibe a imagem do logo central -->
+        </div>
+
+        <!-- ================= ITENS DO LADO ESQUERDO ================= -->
+
+        <a href="/pagina/desempenho" class="item pos-desempenho left">
+            <!-- Link clicável que leva para a página de desempenho -->
+
+            <div class="label">
+                <!-- Área do texto descritivo -->
+
+                <h3>DESEMPENHO GERAL</h3>
+                <!-- Título do card -->
+
+                <p>Sell Out em tabelas e filtros.</p>
+                <!-- Descrição do card -->
+            </div>
+
+            <div class="hex">
+                <!-- Container do ícone em formato hexagonal -->
+
+                <img src="/static/icons/desempenho.png">
+                <!-- Ícone do módulo -->
+            </div>
+        </a>
+
+        <a href="/pagina/pdv" class="item pos-pdv left">
+            <!-- Link para página de análise de PDV -->
+
+            <div class="label">
+                <h3>PDV ANÁLISE</h3>
+                <p>Visão de positivação detalhada.</p>
+            </div>
+
+            <div class="hex">
+                <img src="/static/icons/pdv.png">
+            </div>
+        </a>
+
+        <a href="/pagina/clientes" class="item pos-clientes left">
+            <!-- Link para análise de perfil de clientes -->
+
+            <div class="label">
+                <h3>PERFIL CLIENTES</h3>
+                <p>O famoso P9. Frequência e compra.</p>
+            </div>
+
+            <div class="hex">
+                <img src="/static/icons/clientes.png">
+            </div>
+        </a>
+
+        <a href="/pagina/matriz" class="item pos-matriz left">
+            <!-- Link para matriz estratégica -->
+
+            <div class="label">
+                <h3>MATRIZ O.R.G</h3>
+                <p>Maturidade baseada em BCG.</p>
+            </div>
+
+            <div class="hex">
+                <img src="/static/icons/matriz.png">
+            </div>
+        </a>
+
+        <a href="/pagina/propagandistas" class="item pos-propaganda left">
+            <!-- Link para acompanhamento de propagandistas -->
+
+            <div class="label">
+                <h3>PROPAGANDISTAS</h3>
+                <p>Acompanhamento do time Out do Out.</p>
+            </div>
+
+            <div class="hex">
+                <img src="/static/icons/propagandistas.png">
+            </div>
+        </a>
+
+        <!-- ================= ITENS DO LADO DIREITO ================= -->
+
+        <a href="/pagina/mapa" class="item pos-mapa right">
+            <!-- Link para mapa estratégico -->
+
+            <div class="hex">
+                <img src="/static/icons/mapa.png">
+            </div>
+
+            <div class="label">
+                <h3>MAPA ESTRATÉGICO</h3>
+                <p>Performance regional e cidades.</p>
+            </div>
+        </a>
+
+        <a href="/pagina/redes" class="item pos-redes right">
+            <!-- Link para análise de grandes redes -->
+
+            <div class="hex">
+                <img src="/static/icons/redes.png">
+            </div>
+
+            <div class="label">
+                <h3>REDES</h3>
+                <p>Análise de grandes contas PET.</p>
+            </div>
+        </a>
+
+        <a href="/pagina/rfv" class="item pos-rfv right">
+            <!-- Link para análise RFV (Recência, Frequência e Valor) -->
+
+            <div class="hex">
+                <img src="/static/icons/rfv.png">
+            </div>
+
+            <div class="label">
+                <h3>RFV</h3>
+                <p>Recência, Frequência e Valor.</p>
+            </div>
+        </a>
+
+        <a href="/pagina/fidelidade" class="item pos-fidelidade right">
+            <!-- Link para clientes fidelidade -->
+
+            <div class="hex">
+                <img src="/static/icons/fidelidade.png">
+            </div>
+
+            <div class="label">
+                <h3>CLIENTES FIDELIDADE</h3>
+                <p>Clientes estratégicos e engajados.</p>
+            </div>
+        </a>
+
+        <a href="/pagina/bitv" class="item pos-bitv right">
+            <!-- Link para BI TV -->
+
+            <div class="hex">
+                <img src="/static/icons/bitv.png">
+            </div>
+
+            <div class="label">
+                <h3>BI TV</h3>
+                <p>Painéis de visualização em TV.</p>
+            </div>
+        </a>
+
     </div>
-
-    {% if role == "gerente" %}
-        <p class="info-gerente">
-            Acesso completo aos relatórios estratégicos.
-        </p>
-    {% endif %}
-
-    {% if role == "analista" %}
-        <p class="info-analista">
-            Acesso limitado aos relatórios operacionais.
-        </p>
-    {% endif %}
-
-    <div class="menu">
-
-        <!-- Acesso para ambos -->
-        <a class="btn" href="/pagina/desempenho">📈 Desempenho Geral</a>
-        <a class="btn" href="/pagina/pdv">🏪 PDV Análise</a>
-        <a class="btn" href="/pagina/mapa">🗺️ Mapa Estratégico</a>
-        <a class="btn" href="/pagina/clientes">⭐ Clientes Fidelidade</a>
-
-        {% if role == "gerente" %}
-            <a class="btn" href="/pagina/perfil">👥 Perfil Clientes</a>
-            <a class="btn" href="/pagina/matriz">📊 Matriz O.R.G</a>
-            <a class="btn" href="/pagina/propagandistas">🧑‍⚕️ Propagandistas</a>
-            <a class="btn" href="/pagina/redes">🏬 Redes</a>
-            <a class="btn" href="/pagina/rfv">💰 RFV</a>
-            <a class="btn" href="/pagina/bitv">📺 BI TV</a>
-        {% endif %}
-
-    </div>
-
-    <a class="logout" href="/logout">🚪 Sair</a>
-
 </div>
 
 </body>
+<!-- Fim do corpo da página -->
+
 </html>
+<!-- Fim do documento HTML -->

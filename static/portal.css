@@ -1,0 +1,143 @@
+/* Configurações globais da página */
+body {
+    margin: 0; /* Remove margens padrão do navegador */
+    height: 100vh; /* Ocupa 100% da altura da tela */
+    background: radial-gradient(circle at left, #0a3a7a 0%, #000 55%); /* Fundo degradê azul para preto */
+    font-family: Arial, Helvetica, sans-serif; /* Define a fonte */
+    color: white; /* Cor padrão do texto */
+    overflow: hidden; /* Impede barras de rolagem */
+}
+
+/* Caixa de Informação de Atualização (Topo) */
+.update-box {
+    position: absolute; /* Fixa em relação à tela */
+    top: 15px; /* Distância do topo */
+    left: 50%; /* Move para o centro horizontal */
+    transform: translateX(-50%); /* Ajuste fino para centralizar exatamente pelo meio da div */
+    border: 2px solid gold; /* Borda dourada */
+    border-radius: 12px; /* Cantos arredondados */
+    padding: 8px 18px; /* Espaçamento interno */
+    font-size: 12px; /* Tamanho da fonte */
+    color: gold; /* Cor do texto */
+    background: rgba(0, 0, 0, 0.6); /* Fundo preto transparente para legibilidade */
+}
+
+/* Título "MENU" lateral */
+.menu-title {
+    position: absolute;
+    top: 80px;
+    right: 120px;
+    font-size: 42px;
+    color: gold;
+}
+
+/* Container que segura o círculo e os itens */
+.circle-container {
+    position: absolute; /* Posicionamento absoluto para centralizar na tela */
+    top: 55%; /* Desce um pouco para não bater no topo */
+    left: 50%; 
+    transform: translate(-50%, -50%); /* Centraliza o container nos dois eixos */
+    width: 900px; /* Largura suficiente para os textos não quebrarem */
+    height: 600px;
+}
+
+/* Logo Central com moldura dourada */
+.center-logo {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%; /* Faz a borda ser um círculo perfeito */
+    border: 3px solid gold;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centraliza no meio do container */
+    display: flex; /* Habilita alinhamento interno */
+    justify-content: center; /* Centraliza a imagem horizontalmente */
+    align-items: center; /* Centraliza a imagem verticalmente */
+}
+
+.center-logo img {
+    width: 300px; /* Tamanho da logo OrgaData */
+}
+
+/* Estilo base de cada item (Link + Hexágono + Texto) */
+.item {
+    position: absolute; /* Permite colocar cada item em uma coordenada X,Y */
+    display: flex; /* Alinha o hexágono e o texto lado a lado */
+    align-items: center; /* Alinha o texto verticalmente com o centro do hexágono */
+    gap: 15px; /* Espaço entre o hexágono e o texto */
+    text-decoration: none; /* Remove o sublinhado de link */
+    color: white;
+    width: 350px; /* Largura para garantir que o texto tenha espaço */
+}
+
+/* Direções para itens da ESQUERDA (Texto -> Hexágono) */
+.item.left {
+    justify-content: flex-end; /* Empurra o conteúdo para a direita da div */
+    text-align: right; /* Alinha o texto para a direita */
+}
+
+/* Direções para itens da DIREITA (Hexágono -> Texto) */
+.item.right {
+    justify-content: flex-start; /* Empurra o conteúdo para a esquerda da div */
+    text-align: left; /* Alinha o texto para a esquerda */
+}
+
+/* Desenho do Hexágono usando Clip-Path */
+.hex {
+    min-width: 95px; /* Largura mínima do hexágono */
+    height: 95px; /* Altura do hexágono */
+    background: #1c1c1c; /* Cor de fundo cinza escuro */
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); /* Máscara que corta o formato */
+    border: 3px solid gold; /* Borda dourada (nota: clip-path às vezes esconde bordas reais, por isso o brilho ajuda) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s; /* Suaviza a transição do hover */
+}
+
+.hex img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain; /* Garante que o ícone não distorça */
+}
+
+/* Formatação do Texto (Label) */
+.label h3 {
+    font-size: 14px;
+    color: gold;
+    margin: 0;
+    text-transform: uppercase; /* Deixa o título em caixa alta */
+}
+
+.label p {
+    font-size: 11px;
+    margin-top: 4px;
+    color: #ddd;
+}
+
+/* Efeito de Hover (Passar o Mouse) */
+.item:hover .hex {
+    background: gold; /* Muda o fundo do hexágono para dourado */
+    transform: scale(1.05); /* Aumenta levemente o tamanho */
+}
+
+.item:hover .hex img {
+    filter: brightness(0); /* Deixa o ícone preto para contrastar com o dourado */
+}
+
+/* --- COORDENADAS DOS ITENS (Posicionamento em Arco) --- */
+
+/* Lado Esquerdo */
+.pos-desempenho { top: 0px;   left: -50px; }
+.pos-pdv        { top: 120px;  left: -130px; }
+.pos-clientes   { top: 250px;  left: -160px; }
+.pos-matriz     { top: 380px;  left: -130px; }
+.pos-propaganda { top: 500px;  left: -50px; }
+
+/* Lado Direito */
+.pos-mapa       { top: 0px;   right: -50px; }
+.pos-redes      { top: 120px;  right: -130px; }
+.pos-rfv        { top: 250px;  right: -160px; }
+.pos-fidelidade { top: 380px;  right: -130px; }
+.pos-bitv       { top: 500px;  right: -50px; }

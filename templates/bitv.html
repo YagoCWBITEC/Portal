@@ -1,63 +1,97 @@
 <!DOCTYPE html>
+<!-- Define que o documento é HTML5 -->
+
 <html>
+<!-- Início do documento HTML -->
+
 <head>
     <title>BITV</title>
+    <!-- Título que aparece na aba do navegador -->
+
     <script src="https://cdn.jsdelivr.net/npm/powerbi-client/dist/powerbi.js"></script>
+    <!-- Importa a biblioteca oficial do Power BI para fazer o embed do relatório -->
+
     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+    <!-- Importa o arquivo CSS da pasta static (usando Jinja/FastAPI) -->
 </head>
 
 <body class="dashboard-body">
-    
-    
+<!-- Corpo da página com classe para estilização específica -->
 
     <!-- BOTÃO VOLTAR -->
-<a href="/dashboard" class="btn-voltar">⬅ Voltar</a>
+    <a href="/dashboard" class="btn-voltar">⬅ Voltar</a>
+    <!-- Link que retorna para o dashboard principal -->
 
-
-
-<div id="reportContainer" style="height:100vh;"></div>
+    <div id="reportContainer" style="height:100vh;"></div>
+    <!-- Container onde o relatório do Power BI será renderizado -->
+    <!-- height:100vh faz ocupar 100% da altura da tela -->
 
 <script>
 
-fetch("/get_embed_config/bitv")
-.then(res => res.json())
-.then(data => {
+    // Faz requisição ao backend para buscar as configurações de embed
+    fetch("/get_embed_config/bitv")
 
-    var models = window['powerbi-client'].models;
+    .then(res => res.json())
+    // Converte resposta para JSON
 
-    var embedConfig = {
-        type: 'report',
-        id: data.reportId,
-        embedUrl: data.embedUrl,
-        accessToken: data.embedToken,
-        tokenType: models.TokenType.Embed,
+    .then(data => {
 
-        // Página específica vinda do backend
-        pageName: data.pageName,
+        // Acessa os modelos da biblioteca powerbi-client
+        var models = window['powerbi-client'].models;
 
-        // Configurações visuais
-        settings: {
-            panes: {
-                filters: { visible: false },
-                pageNavigation: { visible: false }
+        // Configuração do embed do relatório
+        var embedConfig = {
+
+            type: 'report',
+            // Define que o tipo incorporado é um relatório
+
+            id: data.reportId,
+            // ID do relatório vindo do backend
+
+            embedUrl: data.embedUrl,
+            // URL de incorporação
+
+            accessToken: data.embedToken,
+            // Token de acesso gerado pelo backend
+
+            tokenType: models.TokenType.Embed,
+            // Define que o token é do tipo Embed
+
+            // Página específica vinda do backend
+            pageName: data.pageName,
+
+            // Configurações visuais do relatório
+            settings: {
+                panes: {
+                    filters: { visible: false },
+                    // Esconde painel de filtros
+
+                    pageNavigation: { visible: false }
+                    // Esconde navegação entre páginas
+                }
             }
-        }
-    };
+        };
 
-    var reportContainer = document.getElementById('reportContainer');
+        // Seleciona o container onde o relatório será renderizado
+        var reportContainer = document.getElementById('reportContainer');
 
-    // Limpa embeds anteriores (boa prática)
-    powerbi.reset(reportContainer);
+        // Limpa embeds anteriores (boa prática para evitar conflito)
+        powerbi.reset(reportContainer);
 
-    // Embed do relatório
-    var report = powerbi.embed(reportContainer, embedConfig);
+        // Realiza o embed do relatório dentro da div
+        var report = powerbi.embed(reportContainer, embedConfig);
 
-})
-.catch(error => {
-    console.error("Erro ao carregar embed config:", error);
-});
+    })
+
+    .catch(error => {
+        // Captura e exibe erro no console caso falhe
+        console.error("Erro ao carregar embed config:", error);
+    });
 
 </script>
 
 </body>
+<!-- Fim do body -->
+
 </html>
+<!-- Fim do documento -->

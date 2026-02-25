@@ -122,3 +122,22 @@ body {
 .pos-rfv        { top: 250px; right: -160px; }
 .pos-fidelidade { top: 380px; right: -130px; }
 .pos-bitv       { top: 500px; right: -50px; }
+
+.btn-sair {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: white;
+    color: #111;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    transition: 0.2s ease;
+}
+
+.btn-sair:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+}

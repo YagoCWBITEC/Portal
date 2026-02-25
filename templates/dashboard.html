@@ -1,119 +1,80 @@
 <!DOCTYPE html>
-<!-- Define que o documento é HTML5 -->
-
 <html lang="pt-BR">
-<!-- Início do documento HTML e define o idioma como Português do Brasil -->
 
 <head>
     <meta charset="UTF-8">
-    <!-- Define a codificação de caracteres como UTF-8 (permite acentos e caracteres especiais) -->
-
     <title>Portal BI</title>
-    <!-- Título da página que aparece na aba do navegador -->
 
     <link rel="stylesheet" href="{{ url_for('static', path='/portal.css') }}">
-    <!-- Importa o arquivo CSS da pasta static (usando template engine, provavelmente FastAPI ou Flask) -->
 </head>
 
 <body>
-<!-- Início do corpo visível da página -->
+
+<!-- BOTÃO SAIR (estilo igual da imagem) -->
+<a href="/" class="btn-sair">← Sair</a>
 
 <div class="update-box">
-    <!-- Caixa de informação de atualização -->
-
     ATUALIZADO DIARIAMENTE. ÚLTIMA ATUALIZAÇÃO EM:<br>
-    <!-- Texto informativo + quebra de linha -->
-
     <b>25/02/2026 07:34</b>
-    <!-- Data e hora da última atualização em negrito -->
 </div>
 
 <h1 class="menu-title">MENU</h1>
-<!-- Título principal da página -->
 
 <div class="dashboard-container">
-    <!-- Container principal que envolve o dashboard -->
 
     <div class="circle-container">
-        <!-- Container que provavelmente organiza os itens em formato circular -->
 
         <div class="center-logo">
-            <!-- Área central do layout -->
-
             <img src="/static/img/logo2.png" alt="Logo OrgaData">
-            <!-- Exibe a imagem do logo central -->
         </div>
 
         <!-- ================= ITENS DO LADO ESQUERDO ================= -->
 
         <a href="/pagina/desempenho" class="item pos-desempenho left">
-            <!-- Link clicável que leva para a página de desempenho -->
-
             <div class="label">
-                <!-- Área do texto descritivo -->
-
                 <h3>DESEMPENHO GERAL</h3>
-                <!-- Título do card -->
-
                 <p>Sell Out em tabelas e filtros.</p>
-                <!-- Descrição do card -->
             </div>
-
             <div class="hex">
-                <!-- Container do ícone em formato hexagonal -->
-
                 <img src="/static/icons/desempenho.png">
-                <!-- Ícone do módulo -->
             </div>
         </a>
 
         <a href="/pagina/pdv" class="item pos-pdv left">
-            <!-- Link para página de análise de PDV -->
-
             <div class="label">
                 <h3>PDV ANÁLISE</h3>
                 <p>Visão de positivação detalhada.</p>
             </div>
-
             <div class="hex">
                 <img src="/static/icons/pdv.png">
             </div>
         </a>
 
         <a href="/pagina/clientes" class="item pos-clientes left">
-            <!-- Link para análise de perfil de clientes -->
-
             <div class="label">
                 <h3>PERFIL CLIENTES</h3>
                 <p>O famoso P9. Frequência e compra.</p>
             </div>
-
             <div class="hex">
                 <img src="/static/icons/clientes.png">
             </div>
         </a>
 
         <a href="/pagina/matriz" class="item pos-matriz left">
-            <!-- Link para matriz estratégica -->
-
             <div class="label">
                 <h3>MATRIZ O.R.G</h3>
                 <p>Maturidade baseada em BCG.</p>
             </div>
-
             <div class="hex">
                 <img src="/static/icons/matriz.png">
             </div>
         </a>
 
         <a href="/pagina/propagandistas" class="item pos-propaganda left">
-            <!-- Link para acompanhamento de propagandistas -->
-
             <div class="label">
                 <h3>PROPAGANDISTAS</h3>
                 <p>Acompanhamento do time Out do Out.</p>
             </div>
-
             <div class="hex">
                 <img src="/static/icons/propagandistas.png">
             </div>
@@ -122,12 +83,9 @@
         <!-- ================= ITENS DO LADO DIREITO ================= -->
 
         <a href="/pagina/mapa" class="item pos-mapa right">
-            <!-- Link para mapa estratégico -->
-
             <div class="hex">
                 <img src="/static/icons/mapa.png">
             </div>
-
             <div class="label">
                 <h3>MAPA ESTRATÉGICO</h3>
                 <p>Performance regional e cidades.</p>
@@ -135,12 +93,9 @@
         </a>
 
         <a href="/pagina/redes" class="item pos-redes right">
-            <!-- Link para análise de grandes redes -->
-
             <div class="hex">
                 <img src="/static/icons/redes.png">
             </div>
-
             <div class="label">
                 <h3>REDES</h3>
                 <p>Análise de grandes contas PET.</p>
@@ -148,12 +103,9 @@
         </a>
 
         <a href="/pagina/rfv" class="item pos-rfv right">
-            <!-- Link para análise RFV (Recência, Frequência e Valor) -->
-
             <div class="hex">
                 <img src="/static/icons/rfv.png">
             </div>
-
             <div class="label">
                 <h3>RFV</h3>
                 <p>Recência, Frequência e Valor.</p>
@@ -161,12 +113,9 @@
         </a>
 
         <a href="/pagina/fidelidade" class="item pos-fidelidade right">
-            <!-- Link para clientes fidelidade -->
-
             <div class="hex">
                 <img src="/static/icons/fidelidade.png">
             </div>
-
             <div class="label">
                 <h3>CLIENTES FIDELIDADE</h3>
                 <p>Clientes estratégicos e engajados.</p>
@@ -174,12 +123,9 @@
         </a>
 
         <a href="/pagina/bitv" class="item pos-bitv right">
-            <!-- Link para BI TV -->
-
             <div class="hex">
                 <img src="/static/icons/bitv.png">
             </div>
-
             <div class="label">
                 <h3>BI TV</h3>
                 <p>Painéis de visualização em TV.</p>
@@ -190,7 +136,4 @@
 </div>
 
 </body>
-<!-- Fim do corpo da página -->
-
 </html>
-<!-- Fim do documento HTML -->

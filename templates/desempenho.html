@@ -2,13 +2,13 @@
 <html>
 <head>
     <title>DESEMPENHO GERAL</title>
-      <script src="https://cdn.jsdelivr.net/npm/powerbi-client/dist/powerbi.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/powerbi-client/dist/powerbi.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
 </head>
 
 <body class="dashboard-body">
 
-    <!-- BOTÃO VOLTAR -->
+<!-- BOTÃO VOLTAR -->
 <a href="/dashboard" class="btn-voltar">⬅ Voltar</a>
 
 <div id="reportContainer" style="height:100vh;"></div>
@@ -21,6 +21,21 @@ fetch("/get_embed_config/desempenho")
 
     var models = window['powerbi-client'].models;
 
+    // 🔐 MONTA FILTRO APENAS PARA USUÁRIO LIMITADO
+    let filters = [];
+
+    if (data.role === "limitado") {
+        filters = [{
+            $schema: "http://powerbi.com/product/schema#basic",
+            target: {
+                table: "dPromotor",
+                column: "Email"
+            },
+            operator: "In",
+            values: [data.username]
+        }];
+    }
+
     var embedConfig = {
         type: 'report',
         id: data.reportId,
@@ -30,6 +45,9 @@ fetch("/get_embed_config/desempenho")
 
         // Página específica vinda do backend
         pageName: data.pageName,
+
+        // ✅ filtro aplicado globalmente
+        filters: filters,
 
         // Configurações visuais
         settings: {
@@ -42,10 +60,8 @@ fetch("/get_embed_config/desempenho")
 
     var reportContainer = document.getElementById('reportContainer');
 
-    // Limpa embeds anteriores (boa prática)
     powerbi.reset(reportContainer);
 
-    // Embed do relatório
     var report = powerbi.embed(reportContainer, embedConfig);
 
 })

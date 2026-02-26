@@ -58,9 +58,6 @@ def get_access_token():
     return response.json().get("access_token")
 
 def get_embed_token():
-    """
-    Gera o token de embed do Power BI SEM RLS.
-    """
     access_token = get_access_token()
     headers = {
         "Authorization": f"Bearer {access_token}",
@@ -83,10 +80,17 @@ def get_embed_token():
 # =====================================================
 
 fake_users = {
-    "rafael.rosa": {"password": "123", "role": "admin"},
-    "bianca.coelho": {"password": "123", "role": "limitado"}
+    "rafael.rosa": {
+        "password": "123",
+        "role": "admin",
+        "email": "rafael.rosa@organnact.com"
+    },
+    "bianca.coelho": {
+        "password": "123",
+        "role": "limitado",
+        "email": "bianca.pereira@organnact.com"
+    }
 }
-print("USUÁRIOS CARREGADOS:", fake_users)
 
 # =====================================================
 # 🔐 CONTROLE DE PERMISSÃO
@@ -117,11 +121,14 @@ async def login(request: Request, username: str = Form(...), password: str = For
     username = username.strip().lower()
     password = password.strip()
     user = fake_users.get(username)
+
     if user and user["password"] == password:
         response = RedirectResponse(url="/dashboard", status_code=303)
         response.set_cookie(key="role", value=user["role"])
         response.set_cookie(key="username", value=username)
+        response.set_cookie(key="email", value=user["email"])
         return response
+
     return templates.TemplateResponse("login.html", {"request": request, "error": "Usuário ou senha inválidos"})
 
 # =====================================================
@@ -138,27 +145,23 @@ async def dashboard(request: Request):
 
     if role == "admin":
         allowed_pages = [
-            {"name": "DESEMPENHO GERAL", "url": "/pagina/desempenho", "description": "Sell Out em tabelas e filtros.", "class": "pos-desempenho left", "icon": "desempenho.png"},
-            {"name": "PDV ANÁLISE", "url": "/pagina/pdv", "description": "Visão de positivação detalhada.", "class": "pos-pdv left", "icon": "pdv.png"},
-            {"name": "PERFIL CLIENTES", "url": "/pagina/clientes", "description": "O famoso P9. Frequência e compra.", "class": "pos-clientes left", "icon": "clientes.png"},
-            {"name": "MATRIZ O.R.G", "url": "/pagina/matriz", "description": "Maturidade baseada em BCG.", "class": "pos-matriz left", "icon": "matriz.png"},
-            {"name": "PROPAGANDISTAS", "url": "/pagina/propagandistas", "description": "Acompanhamento do time Out do Out.", "class": "pos-propaganda left", "icon": "propagandistas.png"},
-            {"name": "MAPA ESTRATÉGICO", "url": "/pagina/mapa", "description": "Performance regional e cidades.", "class": "pos-mapa right", "icon": "mapa.png"},
-            {"name": "REDES", "url": "/pagina/redes", "description": "Análise de grandes contas PET.", "class": "pos-redes right", "icon": "redes.png"},
-            {"name": "RFV", "url": "/pagina/rfv", "description": "Recência, Frequência e Valor.", "class": "pos-rfv right", "icon": "rfv.png"},
-            {"name": "CLIENTES FIDELIDADE", "url": "/pagina/fidelidade", "description": "Clientes estratégicos e engajados.", "class": "pos-fidelidade right", "icon": "fidelidade.png"},
-            {"name": "BI TV", "url": "/pagina/bitv", "description": "Painéis de visualização em TV.", "class": "pos-bitv right", "icon": "bitv.png"},
+            {"name": "DESEMPENHO GERAL", "url": "/pagina/desempenho"},
+            {"name": "PDV ANÁLISE", "url": "/pagina/pdv"},
+            {"name": "PERFIL CLIENTES", "url": "/pagina/clientes"},
+            {"name": "MATRIZ O.R.G", "url": "/pagina/matriz"},
+            {"name": "MAPA ESTRATÉGICO", "url": "/pagina/mapa"},
+            {"name": "REDES", "url": "/pagina/redes"},
         ]
     else:
         allowed_pages = [
-            {"name": "DESEMPENHO GERAL", "url": "/pagina/desempenho", "description": "Sell Out em tabelas e filtros.", "class": "pos-desempenho left", "icon": "desempenho.png"},
-            {"name": "PDV ANÁLISE", "url": "/pagina/pdv", "description": "Visão de positivação detalhada.", "class": "pos-pdv left", "icon": "pdv.png"},
-            {"name": "REDES", "url": "/pagina/redes", "description": "Análise de grandes contas PET.", "class": "pos-redes right", "icon": "redes.png"},
+            {"name": "DESEMPENHO GERAL", "url": "/pagina/desempenho"},
+            {"name": "PDV ANÁLISE", "url": "/pagina/pdv"},
+            {"name": "REDES", "url": "/pagina/redes"},
         ]
 
     return templates.TemplateResponse(
         "dashboard.html",
-        {"request": request, "role": role, "username": username, "allowed_pages": allowed_pages}
+        {"request": request, "role": role, "username": username}
     )
 
 # =====================================================
@@ -166,8 +169,11 @@ async def dashboard(request: Request):
 # =====================================================
 
 @app.get("/get_embed_config/{pagina}")
-def get_embed_config(pagina: str):
+def get_embed_config(pagina: str, request: Request):
     embed_data = get_embed_token()
+
+    role = request.cookies.get("role")
+    email = request.cookies.get("email")
 
     PAGE_MAP = {
         "desempenho": "1e49e497e0d983a56770",
@@ -179,6 +185,7 @@ def get_embed_config(pagina: str):
         "clientes": "58d19e2dc805cac78275",
         "bitv": "16d7a7e6f989c905e93e"
     }
+
     page_name = PAGE_MAP.get(pagina)
     if not page_name:
         return {"error": "Página não encontrada"}
@@ -187,7 +194,9 @@ def get_embed_config(pagina: str):
         "embedToken": embed_data.get("token"),
         "embedUrl": f"https://app.powerbi.com/reportEmbed?reportId={REPORT_ID}&groupId={GROUP_ID}",
         "reportId": REPORT_ID,
-        "pageName": page_name
+        "pageName": page_name,
+        "role": role,
+        "email": email
     }
 
 # =====================================================
@@ -210,4 +219,5 @@ async def logout():
     response = RedirectResponse(url="/")
     response.delete_cookie("role")
     response.delete_cookie("username")
+    response.delete_cookie("email")
     return response

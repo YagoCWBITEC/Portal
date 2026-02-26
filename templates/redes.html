@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>REDES</title>
-        <script src="https://cdn.jsdelivr.net/npm/powerbi-client/dist/powerbi.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/powerbi-client/dist/powerbi.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
 </head>
 
@@ -10,7 +10,6 @@
 
 <!-- BOTÃO VOLTAR -->
 <a href="/dashboard" class="btn-voltar">⬅ Voltar</a>
-
 
 <div id="reportContainer" style="height:100vh;"></div>
 
@@ -20,7 +19,25 @@ fetch("/get_embed_config/redes")
 .then(res => res.json())
 .then(data => {
 
+    console.log("EMAIL:", data.email);
+    console.log("ROLE:", data.role);
+
     var models = window['powerbi-client'].models;
+
+    // 🔐 FILTRO APENAS PARA USUÁRIO LIMITADO
+    let filters = [];
+
+    if (data.role === "limitado") {
+        filters = [{
+            $schema: "http://powerbi.com/product/schema#basic",
+            target: {
+                table: "dPromotor",
+                column: "Email"
+            },
+            operator: "In",
+            values: [data.email]
+        }];
+    }
 
     var embedConfig = {
         type: 'report',
@@ -28,11 +45,11 @@ fetch("/get_embed_config/redes")
         embedUrl: data.embedUrl,
         accessToken: data.embedToken,
         tokenType: models.TokenType.Embed,
-
-        // Página específica vinda do backend
         pageName: data.pageName,
 
-        // Configurações visuais
+        // ✅ filtro global
+        filters: filters,
+
         settings: {
             panes: {
                 filters: { visible: false },
@@ -43,10 +60,7 @@ fetch("/get_embed_config/redes")
 
     var reportContainer = document.getElementById('reportContainer');
 
-    // Limpa embeds anteriores (boa prática)
     powerbi.reset(reportContainer);
-
-    // Embed do relatório
     var report = powerbi.embed(reportContainer, embedConfig);
 
 })

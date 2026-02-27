@@ -1,7 +1,6 @@
 # =====================================================
 # 📦 IMPORTAÇÕES
 # =====================================================
-
 import os
 import requests
 from dotenv import load_dotenv
@@ -13,7 +12,6 @@ from fastapi.templating import Jinja2Templates
 # =====================================================
 # 🔐 Carrega variáveis do .env
 # =====================================================
-
 load_dotenv()
 
 TENANT_ID = os.getenv("TENANT_ID")
@@ -21,6 +19,7 @@ CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 GROUP_ID = os.getenv("GROUP_ID")
 REPORT_ID = os.getenv("REPORT_ID")
+DATASET_ID = os.getenv("DATASET_ID")  # <--- NOVA VARIÁVEL
 
 AUTHORITY_URL = f"https://login.microsoftonline.com/{TENANT_ID}/oauth2/v2.0/token"
 SCOPE = "https://analysis.windows.net/powerbi/api/.default"
@@ -28,7 +27,6 @@ SCOPE = "https://analysis.windows.net/powerbi/api/.default"
 # =====================================================
 # 📁 Caminhos absolutos
 # =====================================================
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
@@ -36,16 +34,16 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 # =====================================================
 # 🚀 Inicialização do App
 # =====================================================
-
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 # =====================================================
-# 🔑 Power BI - Token
+# 🔑 Power BI - Tokens e Metadados
 # =====================================================
 
 def get_access_token():
+    """Gera o token de acesso principal do Azure AD"""
     data = {
         "grant_type": "client_credentials",
         "client_id": CLIENT_ID,
@@ -57,28 +55,43 @@ def get_access_token():
         raise HTTPException(status_code=500, detail="Erro ao gerar access token")
     return response.json().get("access_token")
 
+def get_last_refresh_date():
+    """Busca o horário do último refresh bem-sucedido do Dataset"""
+    try:
+        access_token = get_access_token()
+        headers = {"Authorization": f"Bearer {access_token}"}
+        # Endpoint para histórico de atualização (pegamos apenas a última)
+        url = f"https://api.powerbi.com/v1.0/myorg/groups/{GROUP_ID}/datasets/{DATASET_ID}/refreshes?$top=1"
+        
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            refreshes = response.json().get("value", [])
+            if refreshes and refreshes[0].get("status") == "Completed":
+                return refreshes[0].get("endTime")
+        return None
+    except Exception as e:
+        print(f"ERRO AO BUSCAR REFRESH: {e}")
+        return None
+
 def get_embed_token():
+    """Gera o token de visualização do relatório"""
     access_token = get_access_token()
     headers = {
         "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/json",
     }
-
     url = f"https://api.powerbi.com/v1.0/myorg/groups/{GROUP_ID}/reports/{REPORT_ID}/GenerateToken"
     body = {"accessLevel": "view"}
-
     response = requests.post(url, headers=headers, json=body)
 
     if response.status_code != 200:
         print(f"ERRO POWER BI ({response.status_code}): {response.text}")
         raise HTTPException(status_code=500, detail="Erro ao gerar embed token")
-
     return response.json()
 
 # =====================================================
 # 👤 USUÁRIOS DEFINIDOS
 # =====================================================
-
 fake_users = {
     "rafael.rosa": {
         "password": "123",
@@ -95,23 +108,17 @@ fake_users = {
 # =====================================================
 # 🔐 CONTROLE DE PERMISSÃO
 # =====================================================
-
 def check_permission(request: Request, pagina: str):
     role = request.cookies.get("role")
-    
-    if role == "admin":
-        return True
-    
-    elif role == "limitado":
+    if role == "admin": return True
+    if role == "limitado":
         paginas_permitidas = ["desempenho", "pdv", "clientes", "redes"]
         return pagina in paginas_permitidas
-    
     return False
 
 # =====================================================
-# 🏠 LOGIN
+# 🏠 ROTAS DE LOGIN
 # =====================================================
-
 @app.get("/", response_class=HTMLResponse)
 async def login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request, "error": None})
@@ -132,9 +139,8 @@ async def login(request: Request, username: str = Form(...), password: str = For
     return templates.TemplateResponse("login.html", {"request": request, "error": "Usuário ou senha inválidos"})
 
 # =====================================================
-# 📊 DASHBOARD
+# 📊 DASHBOARD (MENU PRINCIPAL)
 # =====================================================
-
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
     role = request.cookies.get("role")
@@ -142,6 +148,9 @@ async def dashboard(request: Request):
         return RedirectResponse(url="/")
     
     username = request.cookies.get("username")
+    
+    # BUSCA A DATA DE ATUALIZAÇÃO DO POWER BI
+    last_refresh = get_last_refresh_date()
 
     if role == "admin":
         allowed_pages = [
@@ -161,17 +170,20 @@ async def dashboard(request: Request):
 
     return templates.TemplateResponse(
         "dashboard.html",
-        {"request": request, "role": role, "username": username}
+        {
+            "request": request, 
+            "role": role, 
+            "username": username,
+            "last_refresh": last_refresh # <--- Passa a data para o HTML
+        }
     )
 
 # =====================================================
 # 🔥 ENDPOINT EMBED POWER BI
 # =====================================================
-
 @app.get("/get_embed_config/{pagina}")
 def get_embed_config(pagina: str, request: Request):
     embed_data = get_embed_token()
-
     role = request.cookies.get("role")
     email = request.cookies.get("email")
 
@@ -202,7 +214,6 @@ def get_embed_config(pagina: str, request: Request):
 # =====================================================
 # 📄 PÁGINAS DO PORTAL
 # =====================================================
-
 @app.get("/pagina/{pagina}", response_class=HTMLResponse)
 async def pagina(request: Request, pagina: str):
     if not check_permission(request, pagina):
@@ -213,7 +224,6 @@ async def pagina(request: Request, pagina: str):
 # =====================================================
 # 🚪 LOGOUT
 # =====================================================
-
 @app.get("/logout")
 async def logout():
     response = RedirectResponse(url="/")

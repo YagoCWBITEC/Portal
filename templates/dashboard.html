@@ -14,9 +14,20 @@
 <a href="/" class="btn-sair">← Sair</a>
 
 <div class="update-box">
-    ATUALIZADO DIARIAMENTE. ÚLTIMA ATUALIZAÇÃO EM:<br>
-    <b>25/02/2026 07:34</b>
+    <span id="txt-data">BUSCANDO ATUALIZAÇÃO...</span>
 </div>
+
+<script>
+    const rawDate = "{{ last_refresh }}";
+    if (rawDate && rawDate !== "None") {
+        const date = new Date(rawDate);
+        const formatada = date.toLocaleDateString('pt-BR') + ' às ' + 
+                          date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('txt-data').innerText = `DADOS ATUALIZADOS: ${formatada}`;
+    } else {
+        document.getElementById('txt-data').innerText = "DADOS ATUALIZADOS: INDISPONÍVEL";
+    }
+</script>
 
 <h1 class="menu-title">MENU</h1>
 

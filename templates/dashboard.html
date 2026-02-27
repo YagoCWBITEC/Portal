@@ -4,13 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Portal BI</title>
-
     <link rel="stylesheet" href="{{ url_for('static', path='/portal.css') }}">
 </head>
 
 <body>
 
-<!-- BOTÃO SAIR (estilo igual da imagem) -->
 <a href="/" class="btn-sair">← Sair</a>
 
 <div class="update-box">
@@ -32,14 +30,11 @@
 <h1 class="menu-title">MENU</h1>
 
 <div class="dashboard-container">
-
     <div class="circle-container">
 
         <div class="center-logo">
             <img src="/static/img/logo2.png" alt="Logo OrgaData">
         </div>
-
-        <!-- ================= ITENS DO LADO ESQUERDO ================= -->
 
         <a href="/pagina/desempenho" class="item pos-desempenho left">
             <div class="label">
@@ -51,6 +46,7 @@
             </div>
         </a>
 
+        {% if role == 'admin' %}
         <a href="/pagina/pdv" class="item pos-pdv left">
             <div class="label">
                 <h3>PDV ANÁLISE</h3>
@@ -90,8 +86,6 @@
                 <img src="/static/icons/propagandistas.png">
             </div>
         </a>
-
-        <!-- ================= ITENS DO LADO DIREITO ================= -->
 
         <a href="/pagina/mapa" class="item pos-mapa right">
             <div class="hex">
@@ -142,6 +136,7 @@
                 <p>Painéis de visualização em TV.</p>
             </div>
         </a>
+        {% endif %}
 
     </div>
 </div>

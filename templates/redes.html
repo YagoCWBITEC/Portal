@@ -1,74 +1,129 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <title>REDES</title>
+    <meta charset="UTF-8">
+    <title>REDES - OrgaData</title>
     <script src="https://cdn.jsdelivr.net/npm/powerbi-client/dist/powerbi.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+        #reportContainer {
+            width: 100%;
+            height: 100vh;
+        }
+        .btn-voltar {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-family: sans-serif;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: 0.3s;
+        }
+        .btn-voltar:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
 </head>
 
 <body class="dashboard-body">
 
-<!-- BOTÃO VOLTAR -->
-<a href="/dashboard" class="btn-voltar">⬅ Voltar</a>
+    <a href="/dashboard" class="btn-voltar">⬅ Voltar</a>
 
-<div id="reportContainer" style="height:100vh;"></div>
+    <div id="reportContainer"></div>
 
-<script>
+    <script>
+        // Busca as configurações de Embed do servidor (FastAPI)
+        fetch("/get_embed_config/redes")
+            .then(res => res.json())
+            .then(data => {
+                
+                if (data.error) {
+                    console.error("Erro do servidor:", data.error);
+                    return;
+                }
 
-fetch("/get_embed_config/redes")
-.then(res => res.json())
-.then(data => {
+                console.log("Usuário Logado:", data.email);
+                console.log("Nível de Acesso:", data.role);
 
-    console.log("EMAIL:", data.email);
-    console.log("ROLE:", data.role);
+                var models = window['powerbi-client'].models;
+                var reportContainer = document.getElementById('reportContainer');
 
-    var models = window['powerbi-client'].models;
+                // 🔐 LÓGICA DE FILTROS DINÂMICOS
+                let filters = [];
 
-    // 🔐 FILTRO APENAS PARA USUÁRIO LIMITADO
-    let filters = [];
+                if (data.role === "limitado") {
+                    // 1. Filtro por Email na dPromotor
+                    filters.push({
+                        $schema: "http://powerbi.com/product/schema#basic",
+                        target: {
+                            table: "dPromotor",
+                            column: "Email"
+                        },
+                        operator: "In",
+                        values: [data.email]
+                    });
 
-    if (data.role === "limitado") {
-        filters = [{
-            $schema: "http://powerbi.com/product/schema#basic",
-            target: {
-                table: "dPromotor",
-                column: "Email"
-            },
-            operator: "In",
-            values: [data.email]
-        }];
-    }
+                    // 2. Filtro por Coordenador na vSellOutBI
+                    // Aqui usamos data.username assumindo que o nome do Coordenador 
+                    // no BI é o mesmo nome de usuário do sistema.
+                    filters.push({
+                        $schema: "http://powerbi.com/product/schema#basic",
+                        target: {
+                            table: "vSellOutBI",
+                            column: "Coordenador"
+                        },
+                        operator: "In",
+                        values: [data.username || "COORDENADOR_PADRAO"]
+                    });
+                }
 
-    var embedConfig = {
-        type: 'report',
-        id: data.reportId,
-        embedUrl: data.embedUrl,
-        accessToken: data.embedToken,
-        tokenType: models.TokenType.Embed,
-        pageName: data.pageName,
+                // Configuração do Embed
+                var embedConfig = {
+                    type: 'report',
+                    id: data.reportId,
+                    embedUrl: data.embedUrl,
+                    accessToken: data.embedToken,
+                    tokenType: models.TokenType.Embed,
+                    pageName: data.pageName,
 
-        // ✅ filtro global
-        filters: filters,
+                    // Aplica o array de filtros (pode conter 0, 1 ou mais filtros)
+                    filters: filters,
 
-        settings: {
-            panes: {
-                filters: { visible: false },
-                pageNavigation: { visible: false }
-            }
-        }
-    };
+                    settings: {
+                        panes: {
+                            filters: { visible: false },
+                            pageNavigation: { visible: false }
+                        },
+                        background: models.BackgroundType.Transparent
+                    }
+                };
 
-    var reportContainer = document.getElementById('reportContainer');
+                // Inicializa o Embed
+                powerbi.reset(reportContainer);
+                var report = powerbi.embed(reportContainer, embedConfig);
 
-    powerbi.reset(reportContainer);
-    var report = powerbi.embed(reportContainer, embedConfig);
+                // Tratamento de erros de renderização
+                report.on("error", function (event) {
+                    console.error("Erro no Power BI Embed:", event.detail);
+                });
 
-})
-.catch(error => {
-    console.error("Erro ao carregar embed config:", error);
-});
-
-</script>
-
+            })
+            .catch(error => {
+                console.error("Erro ao carregar embed config:", error);
+            });
+    </script>
 </body>
 </html>

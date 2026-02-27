@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
+    <meta charset="UTF-8">
     <title>DESEMPENHO GERAL</title>
     <script src="https://cdn.jsdelivr.net/npm/powerbi-client/dist/powerbi.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
@@ -8,67 +9,76 @@
 
 <body class="dashboard-body">
 
-<!-- BOTÃO VOLTAR -->
 <a href="/dashboard" class="btn-voltar">⬅ Voltar</a>
 
-<div id="reportContainer" style="height:100vh;"></div>
+<div id="reportContainer" style="height:100vh; width: 100%;"></div>
 
 <script>
-
-fetch("/get_embed_config/desempenho")
-.then(res => res.json())
-.then(data => {
-
-    var models = window['powerbi-client'].models;
-
-    // 🔐 MONTA FILTRO APENAS PARA USUÁRIO LIMITADO
-    let filters = [];
-
-    if (data.role === "limitado") {
-        filters = [{
-            $schema: "http://powerbi.com/product/schema#basic",
-            target: {
-                table: "dPromotor",
-                column: "Email"
-            },
-            operator: "In",
-            values: [data.username]
-        }];
+// 1. Garantir que o Power BI Client está disponível
+window.onload = function() {
+    
+    const pbi = window['powerbi-client'];
+    if (!pbi) {
+        console.error("SDK do Power BI não foi carregado!");
+        return;
     }
 
-    var embedConfig = {
-        type: 'report',
-        id: data.reportId,
-        embedUrl: data.embedUrl,
-        accessToken: data.embedToken,
-        tokenType: models.TokenType.Embed,
+    fetch("/get_embed_config/desempenho")
+    .then(res => res.json())
+    .then(data => {
+        console.log("=== DIAGNÓSTICO DE FILTRO ===");
+        console.log("Role:", data.role);
+        console.log("Filtro valor:", data.email);
 
-        // Página específica vinda do backend
-        pageName: data.pageName,
+        const models = pbi.models;
+        let filters = [];
 
-        // ✅ filtro aplicado globalmente
-        filters: filters,
-
-        // Configurações visuais
-        settings: {
-            panes: {
-                filters: { visible: false },
-                pageNavigation: { visible: false }
-            }
+        // 🔐 APLICAÇÃO DO FILTRO PARA O CONRADO
+        if (data.role === "limitado") {
+            filters.push({
+                $schema: "http://powerbi.com/product/schema#basic",
+                target: {
+                    table: "vSellOutBI", // Verifique se o nome no Power BI é exatamente este
+                    column: "Coordenador"
+                },
+                operator: "In",
+                values: [data.email] // "CONRADO B COMERCIAL"
+            });
+            console.log("Filtro estruturado:", filters);
         }
-    };
+const embedConfig = {
+    type: 'report',
+    id: data.reportId,
+    embedUrl: data.embedUrl,
+    accessToken: data.embedToken,
+    tokenType: models.TokenType.Embed,
+    pageName: data.pageName,
+    filters: filters, // Mantém o filtro do Conrado que funcionou
+    settings: {
+        panes: {
+            filters: { visible: false },
+            pageNavigation: { visible: false }
+        },
+        // MANTENHA ASSIM: Não force transparência se o BI já tiver fundo
+        background: models.BackgroundType.Default 
+    }
+};
+        const reportContainer = document.getElementById('reportContainer');
+        
+        // Reset e Embed
+        powerbi.reset(reportContainer);
+        const report = powerbi.embed(reportContainer, embedConfig);
 
-    var reportContainer = document.getElementById('reportContainer');
+        // Captura de erros específicos do Power BI
+        report.on("error", function (event) {
+            console.error("ERRO DETALHADO DO POWER BI:", event.detail);
+        });
 
-    powerbi.reset(reportContainer);
-
-    var report = powerbi.embed(reportContainer, embedConfig);
-
-})
-.catch(error => {
-    console.error("Erro ao carregar embed config:", error);
-});
-
+    })
+    .catch(error => {
+        console.error("Erro na requisição fetch ou processamento:", error);
+    });
+};
 </script>
 
 </body>
